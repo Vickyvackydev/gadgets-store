@@ -5,6 +5,7 @@ import Image from "next/image";
 import ReusableButton from "../button";
 import { ProductDataProps } from "@/types";
 import styles from "./carousel.module.css";
+import { FaStar } from "react-icons/fa";
 const Carousel = dynamic(() => import("react-multi-carousel"), { ssr: false });
 
 interface CarouselSliderProps {
@@ -28,6 +29,22 @@ const responsive = {
 };
 
 export function CarouselSlider(props: CarouselSliderProps) {
+  const generateStar = (ratings: number) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < ratings) {
+        stars.push(
+          <Image src={"/star.png"} width={15} height={15} alt="star" />
+        );
+      } else {
+        stars.push(
+          <Image src={"/gray-star.png"} width={15} height={15} alt="star" />
+        );
+      }
+    }
+
+    return stars;
+  };
   return (
     <div className="max-w-6xl mx-auto my-8">
       {props.productdata.length !== 0 ? (
@@ -45,10 +62,11 @@ export function CarouselSlider(props: CarouselSliderProps) {
           {props.productdata.map((data) => (
             <div
               className="w-full h-full overflow-hidden relative flex flex-col justify-between"
-              key={data.category}
+              key={data.id}
               style={{
                 marginTop: "1rem",
                 paddingTop: "1rem",
+                paddingBottom: "2rem",
               }}
             >
               <div
@@ -62,10 +80,10 @@ export function CarouselSlider(props: CarouselSliderProps) {
                   fontSize: "1rem",
                 }}
               >
-                {data.discountpercentage}%
+                {data.discount ? `${data.discountpercentage}%` : ""}
               </div>
               <div className="mt-10 flex flex-col ">
-                <div>
+                <div className="w-full" style={{ height: "200px" }}>
                   <Image
                     src={data.displayImage}
                     width={200}
@@ -74,7 +92,47 @@ export function CarouselSlider(props: CarouselSliderProps) {
                     className="object-cover"
                   />
                 </div>
-                <span className="text-left">{data.category}</span>
+                <span
+                  className="text-left"
+                  style={{
+                    fontFamily: "Jura",
+                  }}
+                >
+                  {data.category.toUpperCase()}
+                </span>
+              </div>
+              <div>
+                <div>
+                  <span className="w-[140px] break-words font-bold">
+                    {data.name.length > 70
+                      ? `${data.name.slice(0, 70)}...`
+                      : data.name}
+                  </span>
+                  <div className="flex gap-1 items-center">
+                    <div className="flex">
+                      {generateStar(Number(data.ratings))}
+                    </div>
+                    <span className="text-xs">{`(${data.raterange})`}</span>
+                  </div>
+                </div>
+                <div className="mt-5 flex gap-5 items-center">
+                  <span
+                    className={`font-bold text-lg`}
+                    style={{
+                      color: data.activatenewprice ? "red" : "black",
+                    }}
+                  >{`${data.currency}${data.currentprice}.00`}</span>
+                  <span
+                    className="text-gray-200"
+                    style={{
+                      textDecorationLine: "line-through",
+                    }}
+                  >
+                    {data.oldprice !== "" && data.activatenewprice
+                      ? `${data.currency}${data.oldprice}.00`
+                      : ""}
+                  </span>
+                </div>
               </div>
             </div>
           ))}

@@ -45,7 +45,7 @@ function Newproduct() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   return (
-    <main className="my-14 mx-20">
+    <main className="mt-14 mx-20  ">
       <div className="flex justify-between">
         <span className="font-bold text-2xl">New Products</span>
         <div className="flex gap-2 items-center">

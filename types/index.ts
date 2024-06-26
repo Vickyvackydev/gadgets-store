@@ -1,4 +1,5 @@
 export interface ProductDataProps {
+  id: string;
   name: string;
   category: string;
   displayImage: string;
@@ -9,4 +10,5 @@ export interface ProductDataProps {
   discountpercentage: string;
   raterange: string;
   currency: string;
+  activatenewprice: boolean;
 }
